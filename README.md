@@ -1,3 +1,16 @@
+
+// verificasr tamanho dos arquivos
+sudo du -sh * 2>/dev/null | sort -h
+
+/etc/init.d/sshd restart
+
+sudo service ssh restart
+
+who
+
+
+---------------------------------------------------------------------------------------
+
 Porta - USB
 
 sudo ls -l /dev/tty*
@@ -153,6 +166,12 @@ sudo apt-get autoremove
 sudo apt-get autoclean
 sudo apt-get clean
 
+
+update-alternatives: a usar 
+/etc/mysql/my.cnf.fallback para disponibilizar 
+/etc/mysql/my.cnf (my.cnf) em modo auto
+
+
 sudo apt-get -f install
 sudo apt-get -f remove
 
@@ -169,6 +188,10 @@ sudo apt-get update
 sudo apt-get install mysql-server mysql-client
 sudo mysql_secure_installation
 sudo mysql_install_db
+
+
+
+sudo mysqld_safe --skip-grant-tables
 
 
 ----------------------------------------------------------------------------------------
@@ -535,6 +558,8 @@ mongod -dbpath=C:\data\db
 ---------------------------------------------------------------------------------------------------
 Fazer replica de Mongodb
 ---------------------------------------------------------------------------------------------------
+https://mongodbwise.wordpress.com/2014/05/22/mongodb-guia-rapido/
+
 
 mongod --port 40000 --dbpath '/mnt/disks/disk-anubs/mongodb/arbiter' --replSet MDW --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/long.0'
 mongod --port 40001 --dbpath '/mnt/disks/disk-anubs/mongodb/node1' --replSet MDW --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/long.1'
@@ -543,6 +568,11 @@ mongod --port 40003 --dbpath '/mnt/disks/disk-anubs/mongodb/node3' --replSet MDW
 mongod --port 40004 --dbpath '/mnt/disks/disk-anubs/mongodb/node4' --replSet MDW --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/long.4'
 mongo
 
+sudo mongod --bind_ip 0.0.0.0 --port 40001 --dbpath '/mnt/disks/disk-anubs/mongodb/node1' --logpath '/mnt/disks/disk-anubs/mongodb/log/log40001.log'
+[1] 2375
+
+
+sudo mongod --bind_ip 0.0.0.0 --port 40001 --dbpath /mnt/disks/disk-anubs/mongodb/node1 --logpath /mnt/disks/disk-anubs/mongodb/log/log40001.log&
 
 
 mongod --bind_ip 0.0.0.0 --port 40000 --dbpath '/mnt/disks/disk-anubs/mongodb/arbiter' --replSet MDW --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.0'&
@@ -551,12 +581,63 @@ mongod --bind_ip 0.0.0.0 --port 40002 --dbpath '/mnt/disks/disk-anubs/mongodb/no
 mongod --bind_ip 0.0.0.0 --port 40003 --dbpath '/mnt/disks/disk-anubs/mongodb/node3' --replSet MDW --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.3'&
 mongod --bind_ip 0.0.0.0 --port 40004 --dbpath '/mnt/disks/disk-anubs/mongodb/node4' --replSet MDW --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.4'&
 
-var config= {_id: 'MDWCloud',  members: [{ _id: 0, host: '10.158.0.4:40000', arbiterOnly: true },{ _id:1,host:'10.158.0.4:40001' },{ _id:2, host: '10.158.0.4:40002' },{ _id: 3, host: '10.158.0.4:40003' },{ _id: 4, host: '10.158.0.4:40004' }]};
+
+mongod --bind_ip 0.0.0.0 --port 40000 --dbpath '/mnt/disks/disk-anubs/mongodb/arbiter' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.0'&
+mongod --bind_ip 0.0.0.0 --port 40001 --dbpath '/mnt/disks/disk-anubs/mongodb/node1' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.1'&
+mongod --bind_ip 0.0.0.0 --port 40002 --dbpath '/mnt/disks/disk-anubs/mongodb/node2' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.2'&
+mongod --bind_ip 0.0.0.0 --port 40003 --dbpath '/mnt/disks/disk-anubs/mongodb/node3' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.3'&
+mongod --bind_ip 0.0.0.0 --port 40004 --dbpath '/mnt/disks/disk-anubs/mongodb/node4' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.4'&
+
+
+rm /mnt/disks/disk-anubs/mongodb/arbiter/* -R
+rm /mnt/disks/disk-anubs/mongodb/node1/* -R
+rm /mnt/disks/disk-anubs/mongodb/node2/* -R
+rm /mnt/disks/disk-anubs/mongodb/node3/* -R
+rm /mnt/disks/disk-anubs/mongodb/node4/* -R
+rm /mnt/disks/disk-anubs/mongodb/log/* -R
+rm /mnt/disks/disk-anubs/mongodb/db/* -R
+
+
+
+mongod --bind_ip 0.0.0.0 --port 40000 --dbpath '/mnt/disks/disk-anubs/mongodb/arbiter' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.0'&
+mongod --bind_ip 0.0.0.0 --port 40001 --dbpath '/mnt/disks/disk-anubs/mongodb/node1' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.1'&
+mongod --bind_ip 0.0.0.0 --port 40002 --dbpath '/mnt/disks/disk-anubs/mongodb/node2' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.2'&
+mongod --bind_ip 0.0.0.0 --port 40003 --dbpath '/mnt/disks/disk-anubs/mongodb/node3' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.3'&
+mongod --bind_ip 0.0.0.0 --port 40004 --dbpath '/mnt/disks/disk-anubs/mongodb/node4' --replSet MDWCloud --smallfiles --oplogSize 128 --logpath '/mnt/disks/disk-anubs/mongodb/log/log.4'&
+
+
+mongod --bind_ip 0.0.0.0 --port 40001 --dbpath '/mnt/disks/disk-anubs/mongodb/node1' --logpath '/mnt/disks/disk-anubs/mongodb/log/log.1'&
+
+
+//Importar dados no mongo
+mongoimport --db MDWCloud -c ItemSerial --drop --file /home/raydacosta/Downloads/ItemSerial/ItemSerial.json
+
+
+
+
+rs.add( { host: "10.158.0.4:40001", priority: 0, votes: 0 } )
+rs.add( { host: "10.158.0.4:40002", priority: 10, votes: 0 } )
+rs.add( { host: "10.158.0.4:40003", priority: 20, votes: 0 } )
+rs.add( { host: "10.158.0.4:40004", priority: 30, votes: 0 } )
+
+
+// MARCAR AS MAQUIUNAS PARA PRIMARIA
+var config= {_id: 'MDWCloud',  members: [{ _id: 0, host: '10.158.0.4:40000', arbiterOnly: true },{ _id:1,host:'10.158.0.4:40001',priority:2 },{ _id:2, host: '10.158.0.4:40002',priority:1 },{ _id: 3, host: '10.158.0.4:40003',priority:1 },{ _id: 4, host: '10.158.0.4:40004',priority:1 }]};
 rs.initiate(config)
 rs.conf(config);
 rs.conf();
 
+
+//OUTRA FORMA
+cfg = rs.conf(); cfg.members[1].priority = 2; rs.reconfig(cfg);
+
+
+
 mongo "mongodb://10.158.0.4:40000,10.158.0.4:40001,10.158.0.4:40002,10.158.0.4:40003,10.158.0.4:40004/?replicaSet=MDWCloud"
+
+show collections;
+use MDWCloud
+
 
 
 tail -f /mnt/disks/disk-anubs/mongodb/log/long.0
@@ -594,7 +675,22 @@ mongo --port 27017 --dbpath '/home/raydacosta/data/db'
 rs.initiate()
 rs.conf()
 rs.status()
-db.isMaster()
+db.isMaster()// verifica se é master
+rs.reconfig({ force: true })
+
+// tortar prioridade o mandatorio replica
+cfg = rs.conf();
+cfg.members[1].priority = 2;
+rs.reconfig(cfg);
+
+ADM
+mongodump
+mongorestore
+mongostat
+mongotop - mongotop 30
+
+
+
 rs.addArb(localhost:30000)
 rs.slaveOk()
 ps auxww | grep mongo
@@ -624,8 +720,7 @@ mongorestore
 
 show dbs;
 
-use MDW;
-
+use MDWCloud;
 show collections;
 
 db.Item.find();
@@ -656,21 +751,56 @@ db.Item.find({"Process":{$in:["SERIALIZAÇÃO"]}});
 
 db.ItemDB.find({"Epc":{$all:"3035E1A270007840000001CA"}}).pretty();
 
+db.Item.find({"DataCriado":{$lt:ISODate("2019-01-20")}).pretty();
+
+db.Item.find({ DataCriado: { $gt: ISODate('2017-01-01') } });
+
+
+
+
+db.Item.find({ DataCriado: { $gt: ISODate("2019-01-23T01:00:00Z")} });
+db.Item.find({ "DataCriado": { $gte: ISODate("2019-01-23T01:00:00Z")} });
+db.Item.find({ "DataCriado": { $gte: ISODate("2019-01-23T01:00:00Z")} }).count();
+db.Item.find({IdEmpresa: "0123456777", "DataCriado": { $gt: ISODate("2019-01-23T01:00:00Z")} });
+db.Item.find({IdEmpresa: "0123456777", "DataCriado": { $gt: ISODate("2019-01-23T01:00:00Z")} }).count();
+db.Item.find({IdEmpresa: "0123456789", "DataCriado": { $gte: ISODate("2019-02-01T01:00:00Z")} }).count();
+1322901037
+
+
+
+
+
+
 
 
 db.ItemDB.find({"IdObjeto":{$all:["1479472534815"]}}).pretty();
-
 db.ItemDB.find({"IdObjeto":{$all:["1479472534815"]}}).pretty();
-
-
-
 db.Item.find({"IdObjeto":{$in:["1479472534815"]}});
-
 db.Item.find({"Id":{$in:["0"]}});
-
-
-
 db.Item.find({"epc":{$all:["3075E1A6856B61C000000073"]}});
+
+
+db.Item.update({"IdObjeto":"110cb0f4-0033-4ee6-9584-801af72fa954"}, {$set:{Status:"Coletado"}});
+
+
+db.Item.find({"IdObjeto":"110cb0f4-0033-4ee6-9584-801af72fa954"}).pretty();
+db.Item.find({"DataCriado" : ISODate("2019-01-24T19:09:02.071Z")}).pretty();
+db.Item.find({"DataCriado" : {$lte: ISODate("2019-12-01T19:09:02.071Z")}}).pretty();
+
+db.Item.find({"DataCriado" : {$lte: ISODate("2019-12-01T19:09:02.071Z")}}).count();
+
+
+db.Item.update({"DataCriado" : {$gte: ISODate("2018-12-01T19:09:02.071Z")}}, {$set:{SYNCRONIZADOR:"0"}});
+db.Item.update({DataCriado : {$gt: ISODate("2018-12-01T19:09:02.071Z")}}, {$set:{SYNCRONIZADOR:"0"}});
+db.Item.update({DataCriado : {$gte: ISODate("2018-12-01")}}, {$set:{SYNCRONIZADOR:"0"}});
+db.Item.update({DataCriado : {$gte: ISODate("2018-12-01")}}, {$set:{SYNCRONIZADOR:0}},{ multi: true });
+
+db.Item.update({DataCriado : {$gte: ISODate("2019-01-28")}}, {$set:{SYNCRONIZADOR:0}},{ multi: true });
+db.ItemSerial.update({DataCriado : {$gte: ISODate("2019-01-01")}}, {$set:{SYNCRONIZADOR:0}},{ multi: true });
+db.Item.update({DataCriado : {$gte: ISODate("2018-01-28")}}, {$set:{SYNCRONIZADOR:1}},{ multi: true });
+db.Item.find({"Epc":"3035E1B08430EAC000000001"}).pretty();
+
+WFLYSRV0236
 
 
     $lt (menor que)
@@ -688,6 +818,17 @@ db.Item.find({"epc":{$all:["3075E1A6856B61C000000073"]}});
     $size (corresponder qualquer array com número definido de elementos)
     $type (corresponder valores com tipo de dados BSON especificado)
     $not (não igual a)
+
+
+
+
+Equality 	{<key>:<value>} 	db.mycol.find({“by”:”tutorials point”}).pretty() 	where by = ‘tutorials point’
+Less Than 	{<key>:{$lt:<value>}} 	db.mycol.find({“likes”:{$lt:50}}).pretty() 	where likes < 50
+Less Than Equals 	{<key>:{$lte:<value>}} 	db.mycol.find({“likes”:{$lte:50}}).pretty() 	where likes <= 50
+Greater Than 	{<key>:{$gt:<value>}} 	db.mycol.find({“likes”:{$gt:50}}).pretty() 	where likes > 50
+Greater Than Equals 	{<key>:{$gte:<value>}} 	db.mycol.find({“likes”:{$gte:50}}).pretty() 	where likes >= 50
+Not Equals 	{<key>:{$ne:<value>}} 	db.mycol.find({“likes”:{$ne:50}}).pretty() 	where likes != 50
+
 
 ==================================================================================================
 Instalar MongoDB no Ubuntu
@@ -709,6 +850,55 @@ sudo service mongod start
 [initandlisten] waiting for connections on port 27017
 
 sudo service mongod stop
+
+
+
+//retornar as SKU que estão cadastradas sem repetir o registro, para isso basta colocar o distinct.
+db.getCollection('ItemSerial').distinct("Sku")
+
+
+//Like
+db.getCollection('ItemSerial').find({"Sku":/Ba/});
+
+
+
+//Ordenando dados.
+db.getCollection('ItemSerial').find({},{"sigla":1,"Sku":1}).sort({"Sku":1})
+db.getCollection('ItemSerial').find({},{"sigla":1,"Sku":1}).sort({"Sku":-1})
+
+
+
+// identificar duplicidade
+db.ItemSerial.aggregate([
+  { $group: {
+    _id: { Sku: "$name" },   // replace `name` here twice
+    duplicados: { $addToSet: "$_id" },
+    count: { $sum: 1 } 
+  } }, 
+  { $match: { 
+    count: { $gte: 2 } 
+  } },
+  { $sort : { count : -1} },
+  { $limit : 10 }
+]);
+
+
+
+
+
+db.ItemSerial.aggregate([{ $group: {_id: { Sku: "$name" }, duplicados: { $addToSet: "$_id" }, count: { $sum: 1 }  } }, { $match: {  count: { $gte: 2 }  } }, { $sort : { count : -1} }, { $limit : 10 }]);
+db.ItemSerial.aggregate([{ $group: {_id: { Sku: "$name" }, duplicados: { $addToSet: "$_id" }, count: { $sum: 1 }  } }, { $match: {  count: { $gte: 2 }  } }, { $sort : { count : -1} }, { $limit : 10 }]).pretty();
+
+
+
+db.test.find()                                              
+{ "_id" : ObjectId("4ecc05e55dd98a436ddcc47c"), "x" : 1 }      
+
+db.ItemSerial.find({"_id": ObjectId("5c49ed71d93af444078c4441")}).pretty();
+
+db.ItemSerial.find({"Sku": "1250755005"}).pretty();
+
+
 
 ==================================================================================================
 
@@ -761,6 +951,18 @@ from information_schema.TABLES where TABLE_SCHEMA NOT IN ('information_schema','
 and Data_free < 0;
 
 
+=======================================================================================================
+sudo mysql -u root
+mysql> USE mysql;
+mysql> CREATE USER 'root'@'localhost' IDENTIFIED BY '';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
+mysql> UPDATE user SET plugin='auth_socket' WHERE User='root';
+mysql> FLUSH PRIVILEGES;
+mysql> exit;
+
+$ service mysql restart
+
+
 
 =======================================================================================================
 
@@ -782,3 +984,254 @@ sudo apt-get update
 =======================================================================================================
 
 ssh-rsa SHA256:CTxBAg9g8KUfLhNDMQAcCOnDw4UxM+OqM+hkiK8IBgM raydacosta
+
+
+=======================================================================================================
+ACESSAR WILDFLY VIA JCONSOLE
+jconsole -J-Djava.class.path="/usr/lib/jvm/java-8-oracle/lib/tools.jar:/usr/lib/jvm/java-8-oracle/lib/jconsole.jar:/home/raydacosta/wildfly/bin/client/jboss-cli-client.jar"
+service:jmx:http-remoting-jmx://127.0.0.1:9990
+service:jmx:http-remoting-jmx://35.199.125.177:9888
+
+service:jmx:remote+http://35.199.125.177:9888
+admin
+sucesso123
+
+service:jmx:rmi://35.199.125.177:9888/jmxrmi
+
+
+service:jmx:rmi:///jndi/rmi://35.199.125.177:9888/jmxrmi
+
+
+
+Validar porta
+netstat -a | grep 9888
+
+
+Jvisualvm
+/usr/lib/jvm/java-8-oracle/bin/jvisualvm
+
+
+rmiregistry 9889&jstatd -J-Djava.security.policy=all.policy -p 9889
+
+
+jstatd -J-Djava.security.policy=/home/ccrr/jstatd.all.policy -J-Djava.rmi.server.hostname=35.199.125.177 -J-Djava.net.preferIPv4Stack=true -J-Djava.rmi.server.logCalls=true
+
+
+./visualvm -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=9888 -Dcom.sun.management.jmxremote.rmi.port=1098 -Djava.rmi.server.hostname=35.199.125.177
+
+java -Dcom.sun.management.jmxremote.port=3333 \ -Dcom.sun.management.jmxremote.ssl=false \ -Dcom.sun.management.jmxremote.authenticate=false \ visualvm 
+
+
+/usr/lib/jvm/java-8-oracle/jre/lib/management/jmxremote.password.template
+service:jmx:rmi:///jndi/rmi://35.199.125.177:9888/jmxrmi
+
+monitorRoleUser  pass1
+controlRoleUser  pass2
+
+
+
+jvisualvm --cp:a /usr/lib/jvm/java-8-oracle/lib/jboss-cli-client.jar
+
+
+service:jmx:remoting-jmx://35.199.125.177:9888
+
+
+-Dcom.sun.management.jmxremote.port=9999 \-Dcom.sun.management.jmxremote.authenticate=false \ -Dcom.sun.management.jmxremote.ssl=false \
+=======================================================================================================
+
+Altear a senha de SVN
+sudo nano /etc/subversion/passwd
+htpasswd /etc/subversion/passwd lucas
+
+
+
+=======================================================================================================
+ACESSAR JBOSS VIA MANAGER
+
+http://35.199.125.177:9888/management?operation=attribute&name=server-state&json.pretty=1
+http://35.199.125.177:9888/management/subsystem/undertow/server/default-server?operation=resource&recursive=true&json.pretty=1
+
+
+=======================================================================================================
+React Native por onde começar, obrigado Diego Oliveira pela colaboração:
+
+# Comece aqui
+
+Getting Started
+https://facebook.github.io/react-nat…/…/getting-started.html
+
+Learn The Basics
+https://facebook.github.io/react-native/docs/tutorial.html
+
+React Native Overview
+https://www.tutorialspoint.com/re…/react_native_overview.htm
+
+# Udemy (melhores cursos, mas pago)
+
+Build Apps with React-Native
+https://www.udemy.com/reactnative/learn/v4/overview
+
+The Complete React Native and Redux Course
+https://www.udemy.com/the-complete-react-native-…/…/overview
+
+# Util
+
+Component Lifecycle
+https://reactjs.org/docs/react-component.html
+
+Carbon UI - Material Design Components for React Native
+https://carbon-ui.com/
+
+Getting Started with React Native and Redux (IMPORTANTE)
+https://medium.com/…/getting-started-with-react-native-redu…
+
+=======================================================================================================
+
+// instalar o ionic+cordova
+sudo npm install -g ionic cordova
+
+//executar o server
+ionic serve -l
+
+//url
+http://localhost:8200/
+
+// json de steste
+https://api.tvmaze.com/singlesearch/shows?q=the-walking-dead&embed=episodes
+https://restcountries.eu/rest/v2/all
+
+// cria servico rest
+sudo ionic generate service RestApi
+
+
+// instalar cordova
+sudo npm install -g cordova
+
+//instalar adroid para  cordova
+sudo ionic cordova platform add android
+
+//executar no android
+sudo ionic cordova run android
+
+
+//buildar no android
+sudo ionic cordova run android
+
+
+
+-------------------------------------------
+
+//Android Studio project detected
+//ANDROID_HOME=/usr/lib/android-sdk
+//JAVA_HOME=/usr/lib/jvm/java-8-oracle
+set GRADLE_HOME=/home/raydacosta/android-studio/gradle/gradle-4.6
+//ng run app:ionic-cordova-build --platform=android
+
+
+
+// desinstalar 
+sudo npm uninstall -g cordova
+sudo npm install -g cordova
+sudo ionic cordova platform rm android
+
+
+~\AppData\Local\Android\sdk\tools\bin
+sudo android list sdk --all
+sudo android update sdk -u -a -t "android-19"
+sudo sdkmanager "platform-tools" "platforms;android-19"
+sudo sdkmanager "build-tools;19"
+
+sudo /home/raydacosta/Android/Sdk/tools/bin/sdkmanager "platform-tools" "platforms;android-19"
+sudo /home/raydacosta/Android/Sdk/tools/bin/sdkmanager "build-tools;19.1.0"
+
+sudo update sdk -u -a -t 19 android update sdk -u -a -t 20
+
+
+//-----------------------------------------
+//     criar uma aplicação em branco
+//-----------------------------------------
+sudo ionic start oimundo blank
+sudo npm i
+sudo chmod 777 /home/raydacosta/ProjetoAngular -R
+sudo npm i --save -E @ionic/pro
+sudo npm i -D -E @ionic/lab
+sudo npm install -g ionic cordova
+sudo ionic cordova platform add android
+sudo ionic generate service authService
+sudo ionic generate page register
+sudo ionic generate page login
+sudo npm install -g cordova
+sudo ionic cordova platform add android
+sudo cordova run android --device
+sudo ionic cordova run android --device
+sudo ionic serve -l
+
+
+ionic run android --device
+//-----------------------------------------
+//     criar uma aplicação em branco
+//-----------------------------------------
+sudo ionic start oi-mundo blank
+sudo npm i
+sudo chmod 777 /home/raydacosta/ProjetoAngular -R
+sudo npm i --save -E @ionic/pro
+sudo npm i -D -E @ionic/lab
+sudo npm install -g ionic cordova
+sudo ionic cordova platform add android
+sudo npm install -g cordova
+sudo ionic cordova platform add android
+sudo cordova run android
+sudo ionic cordova run android --verbose 
+sudo ionic serve -l
+
+
+
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle" \
+&& export PATH=$JAVA_HOME/bin:$PATH \
+&& export ANDROID_HOME=$HOME/Android/Sdk \
+&& export PATH=${PATH}:${ANDROID_HOME}/tools \
+&& export PATH=${PATH}:${ANDROID_HOME}/platform-tools \
+&& export GRADLE_HOME=/home/raydacosta/android-studio/gradle/gradle-4.6 \
+export PATH=$PATH:$GRADLE_HOME/bin
+
+
+//=======================================================================
+kafka
+
+./zookeeper-server-start.sh config/zookeeper.properties
+./kafka-server-start.sh config/server.properties
+./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic mdwrecebimento
+
+
+//=======================================================================
+
+
+sudo snap install mosquitto          # version 1.5.5, or
+sudo apt  install mosquitto-clients
+
+
+
+
+
+//=======================================================================
+Problema: mysql Too many connections - Solucao
+show processlist;
+show variables like '%max_connections%';
+set global max_connections = 9000;
+
+max_connections=300
+max_user_connections=280
+
+
+//=======================================================================
+
+setar java no Java_home no linux
+siudo nano /etc/environment
+JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/bin/java"
+source /etc/environment
+echo $JAVA_HOME
+
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt update
+sudo apt install oracle-java8-installer
+sudo apt install oracle-java8-set-default
